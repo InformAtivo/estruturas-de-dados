@@ -30,9 +30,16 @@ typedef struct{
     char descricao[261];
     usuario dono;//o dono também pode estar numa estrutura de listas
     tarefa *task;
+    int dia;
+    int mes;
+    int ano;
     long deadline;//procurar biblioteca de tempo e funcionamento da mesma
     comentario *coment;//lista de comentarios sobre a pauta
 }pauta;
+
+
+//estruturas daqui pra cima-----------------------------------------------------
+//Funcoes daqui pra baixo---------------------------------------
 
 
 long Urgencia(int dia, int mes, int ano)
@@ -66,20 +73,20 @@ pauta defPauta(usuario userAtual){
     printf("faca uma breve descricao da pauta\n->");
     scanf("%s",&pautaLocal.descricao);
     pautaLocal.dono.nome = userAtual.nome;
-    while(escolha==Y){
+    while(escolha=='Y'){
         printf("deseja adicionar uma tarefa? (Y/N)\n->");
         scanf("%c",&escolha);
-        while( (escolha!=Y) || (escolha!=N) ){
+        while( (escolha!='Y') || (escolha!='N') ){
             printf("opcao invalida, adicione Y = sim, N = nao\n->");
             scanf("%c",&escolha);
         }
-        if (escolha == Y){
-            defTarefa(pautaLocal,userAtual);
+        if (escolha == 'Y'){
+            defTarefa(pautaLocal,userAtual); // criar defTarefa
         }
     }
     printf("defina uma data no estilo dd/mm/yyyy");
-    scanf("%d/%d/%d",&dia,&mes,&ano);
-    pautaLocal.deadline = Urgencia(dia,mes,ano);
+    scanf("%d/%d/%d",&pautaLocal.dia,&pautaLocal.mes,&pautaLocal.ano);
+    pautaLocal.deadline = Urgencia(pautaLocal.dia,pautaLocal.mes,pautaLocal.ano);
 }
 
 int menuPrincipal(){
@@ -90,7 +97,7 @@ int menuPrincipal(){
     printf("3. Procurar Tarefa");
     printf("4. ");
     printf("0. Sair\n");
-    printf("-> ");
+    printf("->");
     scanf("%d",&escolha);
     return escolha;
 }
@@ -105,7 +112,11 @@ usuario defUser(usuario usual){
     return(usual);
 
 }
-pauta
+
+
+//executaveis --------------------
+
+
 void exeComando(int comando){
     switch(comando){
     case 0:
