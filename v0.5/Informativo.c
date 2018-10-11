@@ -77,8 +77,6 @@ pauta defPauta(usuario userAtual){
     size_t destination_size = sizeof (pautaLocal.dono.nome);
     strncpy(pautaLocal.dono.nome, userAtual.nome, destination_size);
     pautaLocal.dono.nome[destination_size - 1] = '\0';
-
-//    pautaLocal.dono.nome = userAtual.nome;
     while(escolha=='Y'){
         printf("deseja adicionar uma tarefa? (Y/N)\n->");
         fflush(stdin);
@@ -96,6 +94,12 @@ pauta defPauta(usuario userAtual){
     scanf("%d/%d/%d",&pautaLocal.dia,&pautaLocal.mes,&pautaLocal.ano);
     pautaLocal.deadline = Urgencia(pautaLocal.dia,pautaLocal.mes,pautaLocal.ano);
 }
+
+defTarefa(pauta pautaLocal, usuario userAtual){
+    printf("adicionando tarefa a pauta [%s]",pautaLocal.titulo);
+
+}
+
 
 int menuPrincipal(){
     int escolha;
