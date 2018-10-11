@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <string.h>
 
 typedef struct{//deverá haver maior especificação no futuro
     char nome[51];
@@ -69,22 +69,30 @@ pauta defPauta(usuario userAtual){
     int dia,mes,ano;
     pauta pautaLocal;
     printf("defina titulo da pauta\n->");
-    scanf("%s",&pautaLocal.titulo);
+    fflush(stdin);
+    fgets(pautaLocal.titulo, 50, stdin);
     printf("faca uma breve descricao da pauta\n->");
-    scanf("%s",&pautaLocal.descricao);
-    pautaLocal.dono.nome = userAtual.nome;
+    fflush(stdin);
+    fgets(pautaLocal.descricao, 250, stdin);
+    size_t destination_size = sizeof (pautaLocal.dono.nome);
+    strncpy(pautaLocal.dono.nome, userAtual.nome, destination_size);
+    pautaLocal.dono.nome[destination_size - 1] = '\0';
+
+//    pautaLocal.dono.nome = userAtual.nome;
     while(escolha=='Y'){
         printf("deseja adicionar uma tarefa? (Y/N)\n->");
+        fflush(stdin);
         scanf("%c",&escolha);
-        while( (escolha!='Y') || (escolha!='N') ){
-            printf("opcao invalida, adicione Y = sim, N = nao\n->");
+        while( (escolha!='Y') && (escolha!='N') ){
+            printf("%c nao eh uma opcao valida, adicione Y = sim, N = nao\n->",escolha);
+            fflush(stdin);
             scanf("%c",&escolha);
         }
         if (escolha == 'Y'){
-            defTarefa(pautaLocal,userAtual); // criar defTarefa
+           // defTarefa(pautaLocal,userAtual); // criar defTarefa
         }
     }
-    printf("defina uma data no estilo dd/mm/yyyy");
+    printf("defina uma data no estilo dd/mm/yyyy\n->");
     scanf("%d/%d/%d",&pautaLocal.dia,&pautaLocal.mes,&pautaLocal.ano);
     pautaLocal.deadline = Urgencia(pautaLocal.dia,pautaLocal.mes,pautaLocal.ano);
 }
@@ -95,7 +103,7 @@ int menuPrincipal(){
     printf("1. Criar Pauta\n");
     printf("2. Procurar Pauta\n");
     printf("3. Procurar Tarefa");
-    printf("4. ");
+    printf("4. \n");
     printf("0. Sair\n");
     printf("->");
     scanf("%d",&escolha);
@@ -103,11 +111,13 @@ int menuPrincipal(){
 }
 usuario defUser(usuario usual){
     printf("bom dia, qual o seu nome?\n->");
-    scanf("%s",&usual.nome);
-    printf("qual a sua funcao?\n");
+    fflush(stdin);
+    fgets(usual.nome, 50, stdin);
+    printf("qual a sua funcao? (escolha um numero)\n");
     printf("1 = design\n");
     printf("2 = CC\n");
     printf("3 = Admin\n->");
+    fflush(stdin);
     scanf("%d",&usual.cargo);
     return(usual);
 
@@ -117,15 +127,17 @@ usuario defUser(usuario usual){
 //executaveis --------------------
 
 
-void exeComando(int comando){
+void exeComando(int comando,usuario userAtual){
     switch(comando){
     case 0:
-        return;
+        break;
     case 1:
-        defPauta();
-    case 2:
+        defPauta(userAtual);
+        break;
+    default:
         break;
     }
+    return;
 }
 
 int main(){
@@ -133,12 +145,9 @@ int main(){
     usuario atual;
     atual = defUser(atual);
     printf("nome = %s \ncargo = %d\n",atual.nome,atual.cargo);
-    comando = menuPrincipal();
-    while (comando!=0){
-        exeComando(comando);
-        printf("comando = %d\n",comando);
+    do{
         comando = menuPrincipal();
-
-    }
+        exeComando(comando,atual);
+    }while (comando!=0);
 
 }
