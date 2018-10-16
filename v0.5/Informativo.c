@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string.h>
 
-typedef struct{//deverá haver maior especificação no futuro
+typedef struct{//deverá haver maior especificao no futuro
     char nome[51];
     int cargo;
 }usuario;
@@ -20,8 +20,8 @@ typedef struct task{//Luiz está finalizando esse struct
     struct task *proxima;
     char desc[261];
     usuario responsavel;//marcador de quem pegou a tarefa
-    int marcador_responsavel;//marcador de conclusão
-    int marcador_dono;//marcardo de certificaçnao de conclusão
+    int marcador_responsavel;//marcador de conclus‹o
+    int marcador_dono;//marcardo de certificaçnao de conclus‹o
 }tarefa;
 
 
@@ -95,9 +95,16 @@ pauta defPauta(usuario userAtual){
     pautaLocal.deadline = Urgencia(pautaLocal.dia,pautaLocal.mes,pautaLocal.ano);
 }
 
-defTarefa(pauta pautaLocal, usuario userAtual){
-    printf("adicionando tarefa a pauta [%s]",pautaLocal.titulo);
-
+void defTarefa(pauta pautaLocal, usuario userAtual){//n‹o acho que precisa ser enviado nome do usuario
+    printf("adicionando tarefa a pauta [%s]\n",pautaLocal.titulo);
+    tarefa *task=malloc(sizeof(tarefa));
+    pautaLocal->task=task;
+    printf("qual o tipo da tarefa:\n0=texto\n1=foto\n2=ngrafico\n->");
+    scanf("%d",task->tipo);
+    printf("adicione uma breve descri‹o da tarefa\n->");
+    fflush(stdin);
+    fgets(task->desc, 260, stdin);//continuar!!!
+    
 }
 
 
