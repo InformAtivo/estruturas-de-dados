@@ -77,34 +77,67 @@ pauta defPauta(usuario userAtual){
     size_t destination_size = sizeof (pautaLocal.dono.nome);
     strncpy(pautaLocal.dono.nome, userAtual.nome, destination_size);
     pautaLocal.dono.nome[destination_size - 1] = '\0';
+    printf("deseja adicionar uma tarefa? (Y/N)\n->");
+    fflush(stdin);
+    scanf("%c",&escolha);
     while(escolha=='Y'){
-        printf("deseja adicionar uma tarefa? (Y/N)\n->");
-        fflush(stdin);
-        scanf("%c",&escolha);
         while( (escolha!='Y') && (escolha!='N') ){
             printf("%c nao eh uma opcao valida, adicione Y = sim, N = nao\n->",escolha);
             fflush(stdin);
             scanf("%c",&escolha);
         }
         if (escolha == 'Y'){
+            addlisttask(pautaLocal);
            // defTarefa(pautaLocal,userAtual); // criar defTarefa
         }
+        printf("deseja adicionar uma tarefa? (Y/N)\n->");
+        fflush(stdin);
+        scanf("%c",&escolha);
     }
     printf("defina uma data no estilo dd/mm/yyyy\n->");
     scanf("%d/%d/%d",&pautaLocal.dia,&pautaLocal.mes,&pautaLocal.ano);
     pautaLocal.deadline = Urgencia(pautaLocal.dia,pautaLocal.mes,pautaLocal.ano);
 }
 
-void defTarefa(pauta pautaLocal, usuario userAtual){//n‹o acho que precisa ser enviado nome do usuario
+void defTarefa(pauta pautaLocal){//n‹o acho que precisa ser enviado nome do usuario
+    char escolha;
+    tarefa *aux;
     printf("adicionando tarefa a pauta [%s]\n",pautaLocal.titulo);
     tarefa *task=malloc(sizeof(tarefa));
-    pautaLocal->task=task;
-    printf("qual o tipo da tarefa:\n0=texto\n1=foto\n2=ngrafico\n->");
+    if (pautaLocal->task==NULL){
+        pautaLocal->task=task;
+        task->anterior=NULL;
+        task->proxima=NULL;
+    }
+    else{
+        aux=pautaLocal->task;
+        while (task->proxima!=NULL)
+            aux=aux->proxima;
+        aux->proxima=task;
+        task->anterior=aux;
+    }task->proxima=NULL;
+    printf("qual o tipo da tarefa:\n'0' para texto\n'1' para foto\n'2' para grafico\n->");//separar em varios printf para ficar mais organizado;
     scanf("%d",task->tipo);
     printf("adicione uma breve descri‹o da tarefa\n->");
     fflush(stdin);
-    fgets(task->desc, 260, stdin);//continuar!!!
-    
+    fgets(task->desc, 260, stdin);
+/*    printf("\ndeseja colocar uma deadline diferente da dada a pauta? (y/n)\n->");
+    fflush(stdin);
+    scanf("%c",escolha);
+    while( (escolha!='Y') && (escolha!='N') ){
+        printf("%c nao eh uma opcao valida, adicione Y = sim, N = nao\n->",escolha);
+        fflush(stdin);
+        scanf("%c",&escolha);
+    }
+    if (escolha == 'Y'){
+        fflush(stdin);
+        printf("defina uma data no estilo dd/mm/yyyy\n->");
+        scanf("%d/%d/%d",task->dia,task->mes,task->ano);
+    }else{
+        task->dia=pautaLocal->dia;
+        task->mes=pautaLocal->mes;
+        task->ano=pautaLocal->ano;
+    }*/
 }
 
 
@@ -131,7 +164,6 @@ usuario defUser(usuario usual){
     fflush(stdin);
     scanf("%d",&usual.cargo);
     return(usual);
-
 }
 
 
@@ -160,5 +192,5 @@ int main(){
         comando = menuPrincipal();
         exeComando(comando,atual);
     }while (comando!=0);
-
+    return 0;
 }
