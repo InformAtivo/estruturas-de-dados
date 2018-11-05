@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <dirent.h>
+#define CAMINHO "c:\\pauta\\"
+
 
 typedef struct{//deverá haver maior especificao no futuro
     char nome[51];
@@ -15,7 +18,6 @@ typedef struct task{//Luiz está finalizando esse struct
     int marcador_responsavel;//marcador de conclus‹o
     int marcador_dono;//marcardo de certificaçnao de conclus‹o
 }tarefa;
-
 
 typedef struct{
     char titulo[51];
@@ -31,6 +33,13 @@ typedef struct{
 
 //estruturas daqui pra cima-----------------------------------------------------
 //Funcoes daqui pra baixo---------------------------------------
+
+
+char criarpath(char *nome){
+    char path[100];
+    path = CAMINHO ++ nome;
+    return path[100];
+}
 
 
 long Urgencia(int dia, int mes, int ano)
@@ -145,7 +154,7 @@ void defPauta(usuario userAtual){
     FILE *f;
 
     //Fazer uma funcao para escrever a pauta num arquivo
-    f = fopen("pautas","wb+");//pauta.titulo
+    f = fopen(criarpath(pautaLocal.nome),"wb+");//pauta.titulo
     //criar um While, para andar até o final do documento
     fwrite(&pautaLocal,sizeof(pautaLocal),1,f);
     fclose(f);
@@ -195,8 +204,11 @@ void showPautas(){
     fclose(f);
 }
 
-//executaveis --------------------
 
+
+
+
+//executaveis --------------------
 
 void exeComando(int comando,usuario userAtual){
     switch(comando){
