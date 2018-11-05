@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <dirent.h>
-#define CAMINHO "c:\\pauta\\"
-
 
 typedef struct{//deverá haver maior especificao no futuro
     char nome[51];
@@ -18,6 +15,7 @@ typedef struct task{//Luiz está finalizando esse struct
     int marcador_responsavel;//marcador de conclus‹o
     int marcador_dono;//marcardo de certificaçnao de conclus‹o
 }tarefa;
+
 
 typedef struct{
     char titulo[51];
@@ -33,13 +31,6 @@ typedef struct{
 
 //estruturas daqui pra cima-----------------------------------------------------
 //Funcoes daqui pra baixo---------------------------------------
-
-
-char criarpath(char *nome){
-    char path[100];
-    path = CAMINHO ++ nome;
-    return path[100];
-}
 
 
 long Urgencia(int dia, int mes, int ano)
@@ -68,6 +59,7 @@ usuario assingUser(){
     printf("defina o nome do usuario\n->");
     fflush(stdin);
     fgets(usuarioLocal.nome, 50, stdin);
+    pautaLocal.nome[strlen(pautaLocal.nome)-1]='\0';
     printf("defina o cargo do usuario\n");
     printf("1 = design\n");
     printf("2 = CC\n");
@@ -97,6 +89,7 @@ pauta defTarefa(pauta pautaLocal){//n‹o acho que precisa ser enviado nome do usu
     printf("faca uma breve descricao da tarefa\n->");
     fflush(stdin);
     fgets(pautaLocal.task[n].desc, 250, stdin);
+    pautaLocal.task[strlen(pautaLocal.task)-1]='\0';
     printf("voce deseja atribuir essa tarefa a alguem? (Y/N)\n->");
     fflush(stdin);
     scanf("%c",&escolha);
@@ -121,9 +114,11 @@ void defPauta(usuario userAtual){
     printf("defina titulo da pauta\n->");
     fflush(stdin);
     fgets(pautaLocal.titulo, 50, stdin);
+    pautaLocal.titulo[strlen(pautaLocal.titulo)-1]='\0';
     printf("faca uma breve descricao da pauta\n->");
     fflush(stdin);
     fgets(pautaLocal.descricao, 250, stdin);
+    pautaLocal.descricao[strlen(pautaLocal.descricao)-1]='\0';
     size_t destination_size = sizeof (pautaLocal.dono.nome);
     strncpy(pautaLocal.dono.nome, userAtual.nome, destination_size);
     pautaLocal.dono.nome[destination_size - 1] = '\0';
@@ -154,7 +149,7 @@ void defPauta(usuario userAtual){
     FILE *f;
 
     //Fazer uma funcao para escrever a pauta num arquivo
-    f = fopen(criarpath(pautaLocal.nome),"wb+");//pauta.titulo
+    f = fopen("pautas","wb+");
     //criar um While, para andar até o final do documento
     fwrite(&pautaLocal,sizeof(pautaLocal),1,f);
     fclose(f);
@@ -180,6 +175,7 @@ usuario defUser(usuario usual){
     printf("bom dia, qual o seu nome?\n->");
     fflush(stdin);
     fgets(usual.nome, 50, stdin);
+    usual.nome[strlen(usual.nome)-1]='\0';
     printf("qual o seu cargo? (escolha um numero)\n");
     printf("1 = design\n");
     printf("2 = CC\n");
@@ -204,11 +200,8 @@ void showPautas(){
     fclose(f);
 }
 
-
-
-
-
 //executaveis --------------------
+
 
 void exeComando(int comando,usuario userAtual){
     switch(comando){
