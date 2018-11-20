@@ -54,21 +54,76 @@ long Urgencia(int dia, int mes, int ano)
     return (importancia);
 }
 /* - função não é mais necessaria pois o defUser substitui a mesma.
-usuario assingUser(){
-    usuario usuarioLocal;
-    printf("defina o nome do usuario\n->");
-    fflush(stdin);
-    fgets(usuarioLocal.nome, 50, stdin);
-    usuarioLocal.nome[strlen(usuarioLocal.nome)-1]='\0';
-    printf("defina o cargo do usuario\n");
-    printf("1 = design\n");
-    printf("2 = CC\n");
-    printf("3 = Admin\n->");
-    fflush(stdin);
-    scanf("%d",&usuarioLocal.cargo);
-    return usuarioLocal;
+ usuario assingUser(){
+ usuario usuarioLocal;
+ printf("defina o nome do usuario\n->");
+ fflush(stdin);
+ fgets(usuarioLocal.nome, 50, stdin);
+ usuarioLocal.nome[strlen(usuarioLocal.nome)-1]='\0';
+ printf("defina o cargo do usuario\n");
+ printf("1 = design\n");
+ printf("2 = CC\n");
+ printf("3 = Admin\n->");
+ fflush(stdin);
+ scanf("%d",&usuarioLocal.cargo);
+ return usuarioLocal;
+ }
+ */
+
+usuario defUser(){
+    int temp;
+    int mark=1;
+    usuario atual;
+    usuario usuarioTeste;
+    printf("Bom dia, qual o seu nome?\n->");
+    fflush (stdin);
+    fgets(atual.nome,50,stdin);
+    FILE *u;
+    u=fopen("usuarios","rb");
+    int nUsuarios=0;
+    if (u==NULL){
+        fclose(u);
+        printf("qual o seu cargo? (escolha um numero)\n");
+        printf("1 = design\n");
+        printf("2 = CC\n");
+        printf("3 = Admin\n->");
+        fflush(stdin);
+        scanf("%d",&atual.cargo);
+        u=fopen("usuarios","wb+");
+        fwrite(&atual,sizeof(usuario),1,u);
+        return atual;
+    }else{
+        while (1){
+            fread(&usuarioTeste,sizeof(usuario),1,u);
+            if (feof(u)!=0)
+                break;
+            nUsuarios++;
+        }
+        usuario usuariosLista[nUsuarios];
+        for (temp=0;temp<nUsuarios;temp++){
+            fread(&usuariosLista[temp],sizeof(usuario),1,u);
+            if (feof(u)!=0)
+                break;
+            if (usuariosLista[temp].nome == atual.nome){
+                mark=1;
+                atual.cargo = usuariosLista[temp].cargo;
+                break;
+            }
+        }
+    }
+    if (mark==0){
+        printf("qual o seu cargo? (escolha um numero)\n");
+        printf("1 = design\n");
+        printf("2 = CC\n");
+        printf("3 = Admin\n->");
+        fflush(stdin);
+        scanf("%d",&atual.cargo);
+        fwrite(&atual,sizeof(usuario),1,u);
+    }
+    fclose(u);
+    return atual;
 }
-*/
+
 pauta defTarefa(pauta pautaLocal){
     char escolha;
     int n=0;
@@ -409,60 +464,6 @@ void deletePauta(){
         }
     }
     return;
-}
-
-usuario defUser(){
-    int temp;
-    int mark=1;
-    usuario atual;
-    usuario usuarioTeste;
-    printf("Bom dia, qual o seu nome?\n->");
-    fflush (stdin);
-    fgets(atual.nome,50,stdin);
-    FILE *u;
-    u=fopen("usuarios","rb");
-    int nUsuarios=0;
-    if (u==NULL){
-        fclose(u);
-        printf("qual o seu cargo? (escolha um numero)\n");
-        printf("1 = design\n");
-        printf("2 = CC\n");
-        printf("3 = Admin\n->");
-        fflush(stdin);
-        scanf("%d",&atual.cargo);
-        u=fopen("usuarios","wb+");
-        fwrite(&atual,sizeof(usuario),1,u);
-        return atual;
-    }else{
-        while (1){
-            fread(&usuarioTeste,sizeof(usuario),1,u);
-            if (feof(u)!=0)
-                break;
-            nUsuarios++;
-        }
-        usuario usuariosLista[nUsuarios];
-        for (temp=0;temp<nUsuarios;temp++){
-            fread(&usuariosLista[temp],sizeof(usuario),1,u);
-            if (feof(u)!=0)
-                break;
-            if (usuariosLista[temp].nome == atual.nome){
-                mark=1;
-                atual.cargo = usuariosLista[temp].cargo;
-                break;
-            }
-        }
-    }
-    if (mark==0){
-        printf("qual o seu cargo? (escolha um numero)\n");
-        printf("1 = design\n");
-        printf("2 = CC\n");
-        printf("3 = Admin\n->");
-        fflush(stdin);
-        scanf("%d",&atual.cargo);
-        fwrite(&atual,sizeof(usuario),1,u);
-    }
-    fclose(u);
-    return atual;
 }
 
 void showPautas(){
