@@ -249,7 +249,7 @@ pauta editPauta(pauta pautaTeste){
         pautaTeste = defTarefa(pautaTeste);
         break;
     default:
-        n-2;
+        n= n-2;
         switch(n%4){
     case 0:
         printf("defina a nova descricao da tarefa\n->");
@@ -321,7 +321,7 @@ void giveTask(usuario usuarioLocal){
     for(temp=0;temp<nPautas;temp++){
         fread(&pautaLocal[temp],sizeof(pautaTeste),1,f);
         for(x=0;x<20;x++){
-            if((pautaLocal[temp].task[x].tipo) == (usuarioLocal.cargo)){
+            if((pautaLocal[temp].task[x].tipo) == (usuarioLocal.cargo)&&(pautaLocal[temp].task[x].marcador_dono==0)){
                 pautaRelevante[nRelevante] = pautaLocal[temp];
                 pautaRelevante[nRelevante].deadline = Urgencia(pautaRelevante[nRelevante].dia,pautaRelevante[nRelevante].mes,pautaRelevante[nRelevante].ano);
                 nRelevante++;
